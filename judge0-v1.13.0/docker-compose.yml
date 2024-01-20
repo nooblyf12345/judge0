@@ -46,6 +46,14 @@ services:
       - redis-data:/data
     <<: *default-logging
     restart: always
+  client:
+      image: nginx
+      ports:
+          - 8009:80
+      expose:
+          - "2358"
+      volumes:
+          - ./ide:/usr/share/nginx/html
 
 volumes:
   postgres-data:
