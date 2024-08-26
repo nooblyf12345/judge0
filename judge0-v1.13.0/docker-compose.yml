@@ -61,3 +61,6 @@ services:
 volumes:
   postgres-data:
   redis-data:
+networks:
+  public-network:
+    driver: bridge
