@@ -47,6 +47,7 @@ services:
     <<: *default-logging
     restart: always
   client:
+      container_name: judge0_client
       image: nginx
       ports:
           - 8009:80
