@@ -1,53 +1,52 @@
 version: '2'
 
-x-logging:
-  &default-logging
-  logging:
-    driver: json-file
-    options:
-      max-size: 100m
+# x-logging:
+#   &default-logging
+#   logging:
+#     driver: json-file
+#     options:
+#       max-size: 100m
 
 services:
-  server:
-    image: judge0/judge0:1.13.0
-    volumes:
-      - ./judge0.conf:/judge0.conf:ro
-    ports:
-      - "2358:2358"
-    privileged: true
-    <<: *default-logging
-    restart: always
+  # server:
+  #   image: judge0/judge0:1.13.0
+  #   volumes:
+  #     - ./judge0.conf:/judge0.conf:ro
+  #   ports:
+  #     - "2358:2358"
+  #   privileged: true
+  #   <<: *default-logging
+  #   restart: always
 
-  workers:
-    image: judge0/judge0:1.13.0
-    command: ["./scripts/workers"]
-    volumes:
-      - ./judge0.conf:/judge0.conf:ro
-    privileged: true
-    <<: *default-logging
-    restart: always
+  # workers:
+  #   image: judge0/judge0:1.13.0
+  #   command: ["./scripts/workers"]
+  #   volumes:
+  #     - ./judge0.conf:/judge0.conf:ro
+  #   privileged: true
+  #   <<: *default-logging
+  #   restart: always
 
-  db:
-    image: postgres:13.0
-    env_file: judge0.conf
-    volumes:
-      - postgres-data:/var/lib/postgresql/data/
-    <<: *default-logging
-    restart: always
+  # db:
+  #   image: postgres:13.0
+  #   env_file: judge0.conf
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data/
+  #   <<: *default-logging
+  #   restart: always
 
-  redis:
-    image: redis:6.0
-    command: [
-      "bash", "-c",
-      'docker-entrypoint.sh --appendonly yes --requirepass "$$REDIS_PASSWORD"'
-    ]
-    env_file: judge0.conf
-    volumes:
-      - redis-data:/data
-    <<: *default-logging
-    restart: always
+  # redis:
+  #   image: redis:6.0
+  #   command: [
+  #     "bash", "-c",
+  #     'docker-entrypoint.sh --appendonly yes --requirepass "$$REDIS_PASSWORD"'
+  #   ]
+  #   env_file: judge0.conf
+  #   volumes:
+  #     - redis-data:/data
+  #   <<: *default-logging
+  #   restart: always
   client:
-      container_name: judge0_client
       image: nginx
       ports:
           - 8009:80
@@ -55,7 +54,12 @@ services:
           - "2358"
       volumes:
           - ./ide:/usr/share/nginx/html
+      networks:
+        - public-network
 
-volumes:
-  postgres-data:
-  redis-data:
+networks:
+  public-network:
+    driver: bridge
+# volumes:
+#   postgres-data:
+#   redis-data:
