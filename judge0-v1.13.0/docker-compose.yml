@@ -50,17 +50,12 @@ services:
       container_name: judge0_client
       image: nginx
       ports:
-          - 80
+          - 8009:80
       expose:
           - "2358"
       volumes:
           - ./ide:/usr/share/nginx/html
-      networks:
-          - public-network
 
 volumes:
   postgres-data:
   redis-data:
-networks:
-  public-network:
-    driver: bridge
